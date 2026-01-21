@@ -1875,10 +1875,6 @@ Advanced Features
 
 ---
 
-> Full history: [changelog.md](./changelog.md)
-
----
-
 ## Appendix A: ID Formats Reference
 
 ### Quick Reference
