@@ -1,67 +1,67 @@
-# 🎯 ระบบ Checkpoint สำหรับ Claude Code
+# 🎯 Claude Code Checkpoint Summary System
 
 <div align="center">
 
-![รุ่น: 2.12](https://img.shields.io/badge/รุ่น-2.12-blue)
-![สถานะ: พร้อมใช้งาน](https://img.shields.io/badge/สถานะ-พร้อมใช้งาน-brightgreen)
-![สัญญาอนุญาต: MIT](https://img.shields.io/badge/สัญญาอนุญาต-MIT-yellow)
+![Version: 2.12](https://img.shields.io/badge/version-2.12-blue)
+![Status: Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen)
+![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
 
 </div>
 
 ---
 
-## 📖 ภาพรวม
+## 📖 Overview
 
-ระบบ **checkpoint** สำหรับ Claude Code sessions ที่ช่วยให้:
+Checkpoint system for Claude Code sessions that provides:
 
-| 🎯 ฟีเจอร์ | 📝 คำอธิบาย |
+| 🎯 Feature | 📝 Description |
 |-----------|---------------|
-| **ติดตามประวัติ** | Session ID แบบ UUID ที่ไม่ซ้ำกันและสามารถติดตามได้ |
-| **บันทึก Checkpoint** | Observations ใน claude-mem พร้อม metadata ครบถ้วน |
-| **กู้คืนบริบท** | กู้คืน session context จาก checkpoints ได้อย่างมีประสิทธิภาพ |
-| **ติดตาม Lineage** | ติดตาม session lineage ผ่าน `/clear` operations |
+| **Track History** | Unique UUID-based Session IDs that are traceable |
+| **Save Checkpoints** | Observations in claude-mem with complete metadata |
+| **Restore Context** | Better session context restoration from checkpoints |
+| **Trace Lineage** | Track session lineage across `/clear` operations |
 
 ---
 
-## 🚀 เริ่มต้นใช้งาน
+## 🚀 Quick Start
 
 ```bash
-# ติดตั้ง: เพิ่มไฟล์ที่ ~/.claude/skills/checkpoint/SKILL.md
+# Install: Add to ~/.claude/skills/checkpoint/SKILL.md
 
-# การใช้งาน: สร้าง checkpoint
+# Usage: Create checkpoint
 /checkpoint --title "Feature Implementation Complete"
 
-# แสดงรายการ checkpoints
+# List checkpoints
 /checkpoint --list
 
-# กู้คืน checkpoint ล่าสุด
+# Restore latest checkpoint
 /checkpoint --restore
 ```
 
 ---
 
-## 🎨 ฟีเจอร์หลัก
+## 🎨 Key Features
 
-### 1. การระบุ Session ด้วย UUID
+### 1. UUID-based Session Identification
 
 ```text
 Session ID: 7670db3a-2057-406a-a109-afcedef1cb97
-  ├─ ความยาว: 36 ตัวอักษร (UUID v4)
-  ├─ Entropy: 2^122 ความเป็นไปได้
-  └─ ที่มา: Claude Code native
+  ├─ Length: 36 characters (UUID v4)
+  ├─ Entropy: 2^122 possibilities
+  └─ Source: Claude Code native
 ```
 
-### 2. ระบบอ้างอิง Checkpoint
+### 2. Checkpoint Reference System
 
 ```text
 Checkpoint ID: ccp-7670db3a-2057-406a-a109-afcedef1cb97-01-1737196625000
-  ├─ ccp: คำนำหน้า Checkpoint
-  ├─ session_uuid: UUID เต็ม (36 ตัวอักษร)
-  ├─ seq: ลำดับ (01, 02, 03...)
-  └─ unix_ms: Timestamp (13 หลัก)
+  ├─ ccp: Checkpoint prefix
+  ├─ session_uuid: Full UUID (36 chars)
+  ├─ seq: Sequence (01, 02, 03...)
+  └─ unix_ms: Timestamp (13 digits)
 ```
 
-### 3. การติดตาม Session Lineage
+### 3. Session Lineage Tracking
 
 ```text
 Session A (root)
@@ -70,207 +70,207 @@ Session A (root)
    ↓
 Session B (continuation)
 ├─ parent_session: Session A
-└─ สามารถติดตามกลับไปยัง root ได้
+└─ Can trace back to root
 ```
 
-### 4. การกู้คืนข้าม Session
+### 4. Cross-Session Restoration
 
 ```bash
-# กู้คืน checkpoint เฉพาะ
+# Restore specific checkpoint
 /mem-search query="checkpoint:<checkpoint_id>"
 
-# ค้นหา checkpoints ทั้งหมดใน session
+# Find all checkpoints in session
 /mem-search query="checkpoint session:<session_uuid>"
 
-# ติดตาม session lineage
+# Trace session lineage
 /mem-search query="session lineage:<root_uuid>"
 ```
 
 ---
 
-## 📋 ประวัติเวอร์ชัน
+## 📋 Version History
 
-**เวอร์ชันปัจจุบัน:** v2.12 (2026-01-21)
+**Current Version:** v2.12 (2026-01-21)
 
-| เวอร์ชัน | วันที่ | การเปลี่ยนแปลงสำคัญ |
-|---------|---------|---------------------|
-| 2.12 | 2026-01-21 | ✅ เพิ่ม reference.md เอกสารอ้างอิง |
-| 2.11 | 2026-01-21 | ✅ ตรวจสอบความพร้อม MCP และ Fallback Mode |
-| 2.10 | 2026-01-21 | ✅ ออกแบบการกู้คืนหลัง Clear |
-| 2.9 | 2026-01-21 | ✅ บทเรียน - เก็บให้กระทับ |
-| 2.8 | 2026-01-21 | ✅ ทำให้ Session ID ง่ายขึ้น |
-| 2.1 | 2025-01-19 | ✅ อัปเดตรูปแบบ UUID (Claude Code native) |
+| Version | Date | Key Changes |
+|---------|------|-------------|
+| 2.12 | 2026-01-21 | ✅ Added reference.md Quick Reference Documentation |
+| 2.11 | 2026-01-21 | ✅ MCP Readiness Check & Fallback Mode |
+| 2.10 | 2026-01-21 | ✅ Post-Clear Restoration design |
+| 2.9 | 2026-01-21 | ✅ Lesson Learned - Keep It Simple |
+| 2.8 | 2026-01-21 | ✅ Simplified Session ID (AI knows its own ID) |
+| 2.1 | 2025-01-19 | ✅ UUID Format Update (Claude Code native) |
 
-> 📜 **ประวัติเต็ม:** [changelog.md](./changelog.md)
+> 📜 **Full History:** [changelog.md](./changelog.md)
 
 ---
 
-## 🏗️ สถาปัตยกรรม
+## 🏗️ Architecture
 
-### องค์ประกอบ
+### Components
 
 SKILL IMPLEMENTATION LAYER
   ├─ /checkpoint → SKILL.md instructions
-  ├─ Session ID จาก <env> (ไม่ได้ generate)
-  ├─ Checkpoint count จาก MCP query
-  └─ การวิเคราะห์เนื้อหาโดย AI
+  ├─ Session ID from <env> (not generated)
+  ├─ Checkpoint count from MCP query
+  └─ AI-powered content analysis
 
-MCP TOOLS LAYER (ที่มีอยู่แล้ว)
+MCP TOOLS LAYER (Existing)
   ├─ mcp__plugin_claude-mem_memory_create
   ├─ mcp__plugin_claude-mem_mem-search__search
-  └─ เครื่องมือ MCP อื่นๆ ของ claude-mem
+  └─ Other claude-mem MCP tools
 
 STORAGE LAYER
-  └─ ฐานข้อมูล claude-mem observations
+  └─ claude-mem observations database
 
-### การไหลของข้อมูล
+### Data Flow
 
 Session Start
   ↓
-Claude Code สร้าง UUID v4 (Session ID)
+Claude Code generates UUID v4 (Session ID)
   ↓
-ผู้ใช้ทำงาน...
+User works...
   ↓
-ผู้ใช้รัน: /checkpoint
+User runs: /checkpoint
   ↓
 1. MCP Query: checkpoint count
 2. Generate Checkpoint ID
-3. AI วิเคราะห์เนื้อหา session
-4. Create observation ใน claude-mem
+3. AI analyzes session content
+4. Create observation in claude-mem
   ↓
-ผู้ใช้รัน: /clear
+User runs: /clear
   ↓
-Session ใหม่ดำเนินต่อ (UUID เดิม)
+New session continues (same UUID)
   ↓
-สามารถกู้คืน: /checkpoint --restore
+Can restore: /checkpoint --restore
 
 ---
 
-## 📚 เอกสาร
+## 📚 Documentation
 
-| ไฟล์ | วัตถุประสงค์ |
-|------|---------------|
-| **[design.md](./design.md)** | 📐 สเปคทางเทคนิคที่สมบูรณ์ |
-| **[changelog.md](./changelog.md)** | 📜 ประวัติเวอร์ชันและการเปลี่ยนแปลง |
-| **[skills/checkpoint/SKILL.md](./skills/checkpoint/SKILL.md)** | ⚙️ การ implement checkpoint skill |
-| **[skills/checkpoint/reference.md](./skills/checkpoint/reference.md)** | 📚 ตารางอ้างอิง |
-| **[TODO.md](./TODO.md)** | 📋 แผนพัฒนาการ |
+| File | Purpose |
+|------|---------|
+| **[design.md](./design.md)** | 📐 Complete technical specifications |
+| **[changelog.md](./changelog.md)** | 📜 Version history and changes |
+| **[skills/checkpoint/SKILL.md](./skills/checkpoint/SKILL.md)** | ⚙️ Checkpoint skill implementation |
+| **[skills/checkpoint/reference.md](./skills/checkpoint/reference.md)** | 📚 Quick reference tables |
+| **[TODO.md](./TODO.md)** | 📋 Development roadmap |
 
 ---
 
-## 🎯 ปัญหาที่แก้ไข
+## 🎯 Problem Solved
 
-### ปัญหาก่อนใช้ระบบ
+### Issues Before
 
-| ❌ ปัญหา | 🔧 วิธีแก้ |
+| ❌ Issue | 🔧 Solution |
 |---------|-----------|
-| Session ID ไม่ unique | UUID v4: 2^122 ความเป็นไปได้ |
-| ไม่มี timestamp ที่ชัดเจน | Unix milliseconds ใน ID |
-| Session lineage ไม่ชัดเจน | parent_session metadata |
-| Checkpoint ล่าสุดไม่ชัดเจน | MCP query พร้อม sorting |
+| Session ID not unique | UUID v4: 2^122 possibilities |
+| No clear timestamp | Unix milliseconds in ID |
+| Session lineage unclear | parent_session metadata |
+| Latest checkpoint unclear | MCP query with sorting |
 
-### สถาปัตยกรรมการแก้ไข
+### Solution Architecture
 
 ```
-Session ID (UUID v4) → Checkpoint ID (ccp-<uuid>-<seq>-<unix_ms>)
+Session ID (UUID v4) → Checkpoint ID (ccp-<uuid>-<seq>-<unix_ms)
        ↓                         ↓
-   ติดตามได้                    กู้คืนได้
+   Traceable                    Restorable
 ```
 
 ---
 
-## 🛠️ ตัวอย่างการใช้งาน
+## 🛠️ Usage Examples
 
-### Checkpoint แบบพื้นฐาน
+### Basic Checkpoint
 ```bash
 /checkpoint
 ```
 
-### กำหนดชื่อเรื่อง
+### Custom Title
 ```bash
-/checkpoint --title "ออกแบบ API เสร็จสมบูรณ์"
+/checkpoint --title "API Design Complete"
 ```
 
-### กำหนด Tags
+### Custom Tags
 ```bash
-/checkpoint --tags "api,ออกแบบ,rest"
+/checkpoint --tags "api,design,rest"
 ```
 
-### แสดงรายการ Checkpoints
+### List Checkpoints
 ```bash
 /checkpoint --list
 ```
 
-### แสดงทั้งหมด (รวม session แม่)
+### List All (with parent session)
 ```bash
 /checkpoint --list --all
 ```
 
-### กู้คืน Checkpoint ล่าสุด
+### Restore Latest Checkpoint
 ```bash
 /checkpoint --restore
 ```
 
 ---
 
-## 📊 สถานะโครงการ
+## 📊 Project Status
 
-**v2.12** - พร้อมใช้งานจริง ✅
+**v2.12** - Production Ready ✅
 
-| ฟีเจอร์ | สถานะ |
+| Feature | Status |
 |---------|--------|
-| Session ID แบบ UUID | ✅ ใช้งานได้ |
-| ระบบอ้างอิง Checkpoint | ✅ ใช้งานได้ |
-| การติดตาม Session Lineage | ✅ ใช้งานได้ |
-| การกู้คืนข้าม Session | ✅ ใช้งานได้ |
-| การตรวจสอบความพร้อม MCP | ✅ ใช้งานได้ (v2.11) |
-| Fallback Mode | ✅ ใช้งานได้ (v2.11) |
-| เอกสารอ้างอิง | ✅ เพิ่ม (v2.12) |
-| โครงสร้างที่ comply กับ rules | ✅ ยืนยัน (v2.12) |
+| UUID-based Session IDs | ✅ Implemented |
+| Checkpoint Reference System | ✅ Implemented |
+| Session Lineage Tracking | ✅ Implemented |
+| Cross-Session Restoration | ✅ Implemented |
+| MCP Readiness Check | ✅ Implemented (v2.11) |
+| Fallback Mode | ✅ Implemented (v2.11) |
+| Quick Reference Docs | ✅ Added (v2.12) |
+| Rules-Compliant Structure | ✅ Verified (v2.12) |
 
 ---
 
-## 🔗 การพึ่งพา
+## 🔗 Dependencies
 
-| การพึ่งพา | วัตถุประสงค์ |
-|-------------|---------------|
-| **Claude Code** | การสร้าง UUID แบบ native |
-| **claude-mem MCP** | การจัดเก็บ observations |
-| **GitHub** | การเป็นเจ้าของ repository |
+| Dependency | Purpose |
+|------------|---------|
+| **Claude Code** | Native UUID generation |
+| **claude-mem MCP** | Observation storage |
+| **GitHub** | Repository hosting |
 
 ---
 
-## 🚧 การพัฒนาต่อยอด
+## 🚧 Future Enhancements
 
-ดู [TODO.md](./TODO.md) สำหรับฟีเจอร์ที่จะเพิ่ม:
+See [TODO.md](./TODO.md) for upcoming features:
 
 - [ ] Auto-checkpoint (session size threshold)
-- [ ] เปรียบเทียบ checkpoint diff
-- [ ] ฟังก์ชันความ checkpoint
-- [ ] Session timeline แบบกราฟิก
-- [ ] ปรับปรุงการค้นหาข้าม session
+- [ ] Checkpoint diff comparison
+- [ ] Checkpoint merge functionality
+- [ ] Visual session timeline
+- [ ] Cross-session search optimization
 
 ---
 
-## 📄 สัญญาอนุญาต
+## 📄 License
 
-เช่นเดียวกับ project หลัก
+Same as parent project.
 
 ---
 
-## 🤝 การมีส่วนร่วม
+## 🤝 Contributing
 
-ดู [design.md](./design.md) สำหรับแนวทางการมีส่วนร่วม
+See [design.md](./design.md) for contribution guidelines.
 
 ---
 
 <div align="center">
 
-**🌟 ให้คะแนน repo นี้บน GitHub!**
+**🌟 Star this repo on GitHub!**
 
-[⭐ ให้คะแนน](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/stargazers) |
-[🐛 รายงานปัญหา](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/issues) |
-[📖 ดูเอกสาร](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/wiki)
+[⭐ Star](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/stargazers) |
+[🐛 Report Issue](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/issues) |
+[📖 View Docs](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/wiki)
 
 </div>
 
@@ -278,12 +278,12 @@ Session ID (UUID v4) → Checkpoint ID (ccp-<uuid>-<seq>-<unix_ms>)
 
 <div align="center">
 
-**📧 ติดต่อ:** [DarKWinGTM](https://github.com/DarKWinGTM)
+**📧 Contact:** [DarKWinGTM](https://github.com/DarKWinGTM)
 
 ---
 
-**อัปเดตล่าสุด:** 2026-01-21
-**เวอร์ชัน:** 2.12
+**Last Updated:** 2026-01-21
+**Version:** 2.12
 **Repository:** https://github.com/DarKWinGTM/claude-code-checkpoint-summary
 
 </div>
