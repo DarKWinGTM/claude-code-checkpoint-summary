@@ -1,68 +1,75 @@
-# Claude Code Checkpoint Summary System
+# 🎯 Claude Code Checkpoint Summary System
 
-## Overview
+<div align="center">
 
-ระบบ checkpoint สำหรับ Claude Code sessions ที่ช่วยให้:
-- Track session history ได้อย่างยิ่งขึ้นด้วย UUID-based Session IDs
-- Save checkpoints เป็น observations ใน claude-mem
-- Restore context จาก sessions ก่อนหน้าได้อย่างยิ่งขึ้น
-- Trace session lineage ผ่าน `/clear` operations
+![Version: 2.12](https://img.shields.io/badge/version-2.12-blue)
+![Status: Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen)
+![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
 
-## Version
+</div>
 
-**Current Version: v2.12** (2026-01-21)
+---
 
-> Full history: [changelog.md](./changelog.md)
+## 📖 Overview
 
-> Full history: [changelog.md](./changelog.md)
+ระบบ **checkpoint** สำหรับ Claude Code sessions ที่ช่วยให้:
 
-## Problem Statement
+| 🎯 Feature | 📝 Description |
+|-----------|---------------|
+| **Track History** | Session IDs แบบ UUID ที่ unique และ traceable |
+| **Save Checkpoints** | Observations ใน claude-mem พร้อม metadata ครบถ้ม |
+| **Restore Context** | กู้คืน session context จาก checkpoints ได้อย่างยิ่งขึ้น |
+| **Trace Lineage** | ติดตาม session lineage ผ่าน `/clear` operations |
 
-### Issues ที่ระบบแก้ได
+---
 
-1. **Session ID ไม่ unique พอ** - ไม่สามารถระบุได้ว่า checkpoint มาจาก session ไหน
-2. **ไม่มี timestamp ที่ชัดเจน** - ยากต่อการ trace ประวัติ
-3. **Session lineage ไม่ชัดเจน** - ไม่รู้ว่า session ไหนเกิดจาก session ไหน
-4. **Checkpoint ล่าสุดไม่ชัดเจน** - ไม่รู้ว่า checkpoint ไหนคือล่าสุดก่อน clear
+## 🚀 Quick Start
 
-### Solution
+```bash
+# Install: Add to ~/.claude/skills/checkpoint/SKILL.md
 
+# Usage: Create checkpoint
+/checkpoint --title "Feature Implementation Complete"
+
+# List checkpoints
+/checkpoint --list
+
+# Restore latest checkpoint
+/checkpoint --restore
 ```
-Session ID (UUID v4) → Checkpoint ID (ccp-<uuid>-<seq>-<unix_ms>)
-       ↓                         ↓
-Traceable          Restoreable
-```
 
-## Key Features
+---
+
+## 🎨 Key Features
 
 ### 1. UUID-based Session Identification
 
-```
-Session ID: 7670db3a-2057-406a-a109-afcedef1cb97 (36 chars)
-Entropy: 2^122 = 5.3×10^36 possibilities
-Source: Claude Code native (UUID v4 standard)
+```text
+Session ID: 7670db3a-2057-406a-a109-afcedef1cb97
+  ├─ Length: 36 characters (UUID v4)
+  ├─ Entropy: 2^122 possibilities
+  └─ Source: Claude Code native
 ```
 
 ### 2. Checkpoint Reference System
 
-```
+```text
 Checkpoint ID: ccp-7670db3a-2057-406a-a109-afcedef1cb97-01-1737196625000
-Components:
-├─ ccp: Checkpoint prefix
-├─ session_uuid: Full UUID (36 chars)
-├─ seq: Sequence number (01, 02, 03, ...)
-└─ unix_ms: Unix timestamp in milliseconds (13 chars)
+  ├─ ccp: Checkpoint prefix
+  ├─ session_uuid: Full UUID (36 chars)
+  ├─ seq: Sequence (01, 02, 03...)
+  └─ unix_ms: Timestamp (13 digits)
 ```
 
 ### 3. Session Lineage Tracking
 
-```
+```text
 Session A (root)
 ├─ Checkpoint 1, 2
 └─ /clear
    ↓
-Session B (child)
-├─ parent_session: Session A UUID
+Session B (continuation)
+├─ parent_session: Session A
 └─ Can trace back to root
 ```
 
@@ -79,116 +86,210 @@ Session B (child)
 /mem-search query="session lineage:<root_uuid>"
 ```
 
-## Usage
+---
 
-### Basic Checkpoint
+## 📋 Version History
 
-```bash
-/checkpoint
-```
+**Current Version:** v2.12 (2026-01-21)
 
-### Checkpoint with Custom Title
+| Version | Date | Key Changes |
+|---------|------|-------------|
+| 2.12 | 2026-01-21 | ✅ Added reference.md Quick Reference Documentation |
+| 2.11 | 2026-01-21 | ✅ MCP Readiness Check & Fallback Mode |
+| 2.10 | 2026-01-21 | ✅ Post-Clear Restoration design |
+| 2.9 | 2026-01-21 | ✅ Lesson Learned - Keep It Simple |
+| 2.8 | 2026-01-21 | ✅ Simplified Session ID (AI knows its own ID) |
+| 2.1 | 2025-01-19 | ✅ UUID Format Update (Claude Code native) |
 
-```bash
-/checkpoint --title "Feature Implementation Complete"
-```
+> 📜 **Full History:** [changelog.md](./changelog.md)
 
-### View Session Info
+---
 
-```bash
-/session-info
-```
-
-### Restore Context
-
-```bash
-# In new session, run:
-/mem-search query="checkpoint:<checkpoint_id>"
-
-# System returns:
-# - Session summary
-# - Key outcomes
-# - Related observations
-# - Files referenced
-```
-
-## Architecture
+## 🏗️ Architecture
 
 ### Components
 
-1. **Session Manager** - Track session state (UUID, start time, checkpoints)
-2. **Checkpoint Generator** - Create checkpoint IDs and observations
-3. **Storage Layer** - claude-mem observations
-4. **Retrieval Mechanism** - /mem-search queries
+```
+┌─────────────────────────────────────────────────┐
+│  SKILL IMPLEMENTATION LAYER                    │
+│  ├─ /checkpoint → SKILL.md instructions       │
+│  ├─ Session ID from <env> (not generated)    │
+│  ├─ Checkpoint count from MCP query            │
+│  └─ AI-powered content analysis              │
+├─────────────────────────────────────────────────┤
+│  MCP TOOLS LAYER (Existing)                    │
+│  ├─ mcp__plugin_claude-mem_memory_create     │
+│  ├─ mcp__plugin_claude-mem_mem-search__search  │
+│  └─ Other claude-mem MCP tools                 │
+├─────────────────────────────────────────────────┤
+│  STORAGE LAYER                                │
+│  └─ claude-mem observations database           │
+└─────────────────────────────────────────────────┘
+```
 
 ### Data Flow
 
 ```
 Session Start
   ↓
-Generate UUID (Claude Code native)
+Claude Code generates UUID v4 (Session ID)
   ↓
 User works...
   ↓
-User runs /checkpoint
+User runs: /checkpoint
   ↓
-Create observation in claude-mem
+1. MCP Query: checkpoint count
+2. Generate Checkpoint ID
+3. AI analyzes session content
+4. Create observation in claude-mem
   ↓
-User runs /clear
+User runs: /clear
   ↓
-New session (new UUID)
+New session continues (same UUID)
   ↓
-Can restore from checkpoint
+Can restore: /checkpoint --restore
 ```
 
-## Design Document
+---
 
-See [design.md](./design.md) for:
-- Complete technical specifications
-- Metadata schemas
-- Implementation flows
-- API specifications
-- Examples
-- Edge cases
+## 📚 Documentation
 
-## Status
+| File | Purpose |
+|------|---------|
+| **[design.md](./design.md)** | 📐 Complete technical specifications |
+| **[changelog.md](./changelog.md)** | 📜 Version history and changes |
+| **[skills/checkpoint/SKILL.md](./skills/checkpoint/SKILL.md)** | ⚙️ Checkpoint skill implementation |
+| **[skills/checkpoint/reference.md](./skills/checkpoint/reference.md)** | 📚 Quick reference tables |
+| **[TODO.md](./TODO.md)** | 📋 Development roadmap |
 
-**v2.12** - Production Ready
+---
 
-- [x] UUID-based Session IDs
-- [x] Checkpoint Reference System
-- [x] Session Lineage Tracking
-- [x] Cross-Session Restoration
-- [x] Observation Templates
-- [x] MCP Readiness Check & Fallback Mode
-- [x] Quick Reference Documentation (reference.md)
-- [x] Rules-Compliant Documentation Structure
+## 🎯 Problem Solved
 
-## Dependencies
+### Issues Before
 
-- **Claude Code** - Native UUID generation
-- **claude-mem** - Observation storage and retrieval
-- **MCP Servers** - For integration hooks
+| ❌ Issue | 🔧 Solution |
+|---------|-----------|
+| Session ID ไม่ unique | UUID v4: 2^122 possibilities |
+| ไม่มี timestamp ที่ชัดเจน | Unix milliseconds in ID |
+| Session lineage ไม่ชัดเจน | parent_session metadata |
+| Checkpoint ล่าสุดไม่ชัดเจน | MCP query with sorting |
 
-## Future Enhancements
+### Solution Architecture
+
+```
+Session ID (UUID v4) → Checkpoint ID (ccp-<uuid>-<seq>-<unix_ms)
+       ↓                         ↓
+   Traceable                    Restorable
+```
+
+---
+
+## 🛠️ Usage Examples
+
+### Basic Checkpoint
+```bash
+/checkpoint
+```
+
+### Custom Title
+```bash
+/checkpoint --title "API Design Complete"
+```
+
+### Custom Tags
+```bash
+/checkpoint --tags "api,design,rest"
+```
+
+### List Checkpoints
+```bash
+/checkpoint --list
+```
+
+### List All (with parent session)
+```bash
+/checkpoint --list --all
+```
+
+### Restore Latest Checkpoint
+```bash
+/checkpoint --restore
+```
+
+---
+
+## 📊 Project Status
+
+**v2.12** - Production Ready ✅
+
+| Feature | Status |
+|---------|--------|
+| UUID-based Session IDs | ✅ Implemented |
+| Checkpoint Reference System | ✅ Implemented |
+| Session Lineage Tracking | ✅ Implemented |
+| Cross-Session Restoration | ✅ Implemented |
+| MCP Readiness Check | ✅ Implemented (v2.11) |
+| Fallback Mode | ✅ Implemented (v2.11) |
+| Quick Reference Docs | ✅ Added (v2.12) |
+| Rules-Compliant Structure | ✅ Verified (v2.12) |
+
+---
+
+## 🔗 Dependencies
+
+| Dependency | Purpose |
+|------------|---------|
+| **Claude Code** | Native UUID generation |
+| **claude-mem MCP** | Observation storage |
+| **GitHub** | Repository hosting |
+
+---
+
+## 🚧 Future Enhancements
 
 See [TODO.md](./TODO.md) for upcoming features:
 
-- Auto-checkpoint (when session grows too large)
-- Checkpoint diff comparison
-- Checkpoint merge functionality
-- Visual session timeline
-- Cross-session search optimization
+- [ ] Auto-checkpoint (session size threshold)
+- [ ] Checkpoint diff comparison
+- [ ] Checkpoint merge functionality
+- [ ] Visual session timeline
+- [ ] Cross-session search optimization
 
-## License
+---
+
+## 📄 License
 
 Same as parent project.
 
-## Contributing
+---
+
+## 🤝 Contributing
 
 See [design.md](./design.md) for contribution guidelines.
 
 ---
 
+<div align="center">
+
+**🌟 Star this repo on GitHub!**
+
+[⭐ Star](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/stargazers) |
+[🐛 Report Issue](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/issues) |
+[📖 View Docs](https://github.com/DarKWinGTM/claude-code-checkpoint-summary/wiki)
+
+</div>
+
+---
+
+<div align="center">
+
+**📧 Contact:** [DarKWinGTM](https://github.com/DarKWinGTM)
+
+---
+
 **Last Updated:** 2026-01-21
 **Version:** 2.12
+**Repository:** https://github.com/DarKWinGTM/claude-code-checkpoint-summary
+
+</div>
